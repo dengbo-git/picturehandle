@@ -82,6 +82,7 @@ public class WxServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, T>
         new Thread(new Runnable() {
             @Override
             public void run() {
+
                 try {
                     emailUtils.sendEmail("警告信息！", msg + "\n   " + err.getMessage() + '\n' + "  类" + position.getName() + '\n' + "  行号" + err.getStackTrace()[0].getLineNumber(), null);
                 } catch (MessagingException e) {

@@ -11,6 +11,7 @@ import javax.annotation.Resource;
  * @date ：Created in 2022/3/18 19:31
  * @description：基础server类
  */
+
 public class BaseController {
 
 

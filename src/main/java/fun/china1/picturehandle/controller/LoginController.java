@@ -1,6 +1,7 @@
 package fun.china1.picturehandle.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import fun.china1.picturehandle.controller.base.BaseController;
 import fun.china1.picturehandle.service.LoginSystem;
 import org.springframework.web.bind.annotation.*;
 
