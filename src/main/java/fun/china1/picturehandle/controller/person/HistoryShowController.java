@@ -24,9 +24,9 @@ public class HistoryShowController extends BaseController {
     HistoryShow historyShow;
 
     @RequestMapping("/getData")
-    public JSONObject getData(@RequestParam("pageNumber") Integer pageNumber, @RequestParam("pageSize") Integer pageSize, @RequestParam("token") String token){
+    public JSONObject getData(@RequestParam(value = "lastId") Integer lastId, @RequestParam("needSize") Integer needSize, @RequestParam("token") String token){
         JSONObject returnValue = new JSONObject();
-        JSONArray data = historyShow.getData(pageNumber, pageSize, getOpenid(token));
+        JSONArray data = historyShow.getData(lastId, needSize, getOpenid(token));
         returnValue.put("data",data);
         returnValue.put("state","1");
         return returnValue;

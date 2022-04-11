@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author ：波波
@@ -31,20 +32,21 @@ public class HistoryShowImpl extends WxServiceImpl<WxUserPictureMapper, WxUserPi
     private QiNiuUtil qiNiuUtil;
 
     @Override
-    public JSONArray getData(Integer pageNumber,Integer pageSize,String openId) {
+    public JSONArray getData(Integer lastId,Integer needSize,String openId) {
         JSONArray returnValue = new JSONArray(new LinkedList<>());
-        Page<WxUserPicture> page = new Page<>(pageNumber, pageSize);
         QueryWrapper<WxUserPicture> queryWrapper = new QueryWrapper();
         queryWrapper.lambda().eq(WxUserPicture::getWxOpenid,openId);
         queryWrapper.lambda().eq(WxUserPicture::getWxImgDelete,0);
         queryWrapper.lambda().orderBy(openId!=null,false,WxUserPicture::getWxOperateTime);
-        Page<WxUserPicture> wxPictures = page(page, queryWrapper);
-        wxPictures.getRecords().forEach(picture ->{
+        if (lastId != -1) {
+            queryWrapper.lambda().lt(WxUserPicture::getId,lastId);
+        }
+        queryWrapper.last("limit "+needSize);
+        List<WxUserPicture> wxUserPictures = baseMapper.selectList(queryWrapper);
+        wxUserPictures.forEach(picture ->{
             try{
                 String publicRawImgUrl = qiNiuUtil.downloadRawImg(picture.getWxImgRawUrl());
                 String publicHandleImgUrl = qiNiuUtil.downloadRawImg(picture.getWxImgHandleUrl());
-
-
                 picture.setWxImgRawUrl(publicRawImgUrl);
                 picture.setWxImgHandleUrl(publicHandleImgUrl);
             }catch (Exception e){
